@@ -1,0 +1,28 @@
+
+insert into Strongheim_Gradebook values (101,'Assignment #1','homework',TO_DATE('2016-02-09','YYYY-MM-DD'),99);
+insert into Strongheim_Gradebook values (101,'Assignment #2','quiz',TO_DATE('2016-02-10','YYYY-MM-DD'),78);
+insert into Strongheim_Gradebook values (101,'Assignment #3','project',TO_DATE('2016-02-11','YYYY-MM-DD'),80);
+insert into Strongheim_Gradebook values (101,'Assignment #4','test',TO_DATE('2016-02-12','YYYY-MM-DD'),90);
+insert into Strongheim_Gradebook values (103,'Assignment #1','homework',TO_DATE('2016-02-09','YYYY-MM-DD'),77);
+insert into Strongheim_Gradebook values (103,'Assignment #2','quiz',TO_DATE('2016-02-10','YYYY-MM-DD'),80);
+insert into Strongheim_Gradebook values (103,'Assignment #3','project',TO_DATE('2016-02-11','YYYY-MM-DD'),68);
+insert into Strongheim_Gradebook values (103,'Assignment #4','test',TO_DATE('2016-02-12','YYYY-MM-DD'),85);
+insert into Strongheim_Gradebook values (105,'Assignment #1','homework',TO_DATE('2016-02-09','YYYY-MM-DD'),92);
+insert into Strongheim_Gradebook values (105,'Assignment #2','quiz',TO_DATE('2016-02-10','YYYY-MM-DD'),80);
+insert into Strongheim_Gradebook values (105,'Assignment #3','project',TO_DATE('2016-02-11','YYYY-MM-DD'),90);
+insert into Strongheim_Gradebook values (105,'Assignment #4','test',TO_DATE('2016-02-12','YYYY-MM-DD'),88);
+
+--Sample SQL Queries
+select * from STRONGHEIM_GRADEBOOK;
+--all assignments by student
+select * from STRONGHEIM_GRADEBOOK where STUDENTID = '101';
+--all assignments of particular type by anyone
+select * from STRONGHEIM_GRADEBOOK where ASSIGNMENTTYPE = 'homework';
+--all assignments of particular type by particular student
+select * from STRONGHEIM_GRADEBOOK where ASSIGNMENTTYPE = 'homework' and STUDENTID = '101';
+--average grade for particular student
+select AVG(assignmentgrade) from STRONGHEIM_GRADEBOOK where STUDENTID = '103';
+--average grade for particular student for a particular assignment
+select AVG(assignmentgrade) from STRONGHEIM_GRADEBOOK where STUDENTID = '103' and ASSIGNMENTTYPE = 'homework';
+--high/low grade by assignment type
+select max(assignmentgrade) as "Max Grade", min(assignmentgrade) as "Min Grade" FROM STRONGHEIM_GRADEBOOK where  ASSIGNMENTTYPE = 'homework';

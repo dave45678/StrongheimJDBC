@@ -69,8 +69,9 @@ public class Gradebook extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
+		
 		//redirect to next page
-		getServletContext().getRequestDispatcher("/dataentry.jsp").forward(request, response);
+		getServletContext().getRequestDispatcher("/gradebook.jsp").forward(request, response);
 	}
 
 }
