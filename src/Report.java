@@ -28,23 +28,9 @@ public class Report extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String query = request.getParameter("query");
-		
-		String studentId = null;
-		if (request.getParameter("studentId")==null ||request.getParameter("studentId")=="%25" ){
-			studentId = "%";
-		}else{
-			studentId = request.getParameter("studentId");
-		}
-		 
-		String assignmentType = null;
-		if (request.getParameter("assignmentType")==null ||request.getParameter("assignmentType")=="%25" ){
-			assignmentType = "%";
-		}else{
-			assignmentType = request.getParameter("assignmentType");
-		}
-		
-		
-		
+		String studentId = request.getParameter("studentId");
+		String assignmentType = request.getParameter("assignmentType");
+
 		String ConnectionString = "jdbc:oracle:thin:testuserdb/password@localhost";
 		Connection con = null;
 		
@@ -63,35 +49,35 @@ public class Report extends HttpServlet {
 		if(query.equals("assignmentsByStudent")){
 			heading = "Assignments By Student";
 			sql = "select * from STRONGHEIM_GRADEBOOK where STUDENTID=?";
-			pstmt = con.prepareStatement(sql);	
-		}else if (query.equals("assignmentsByAssignmentType")){
-			sql = "select * from STRONGHEIM_GRADEBOOK where ASSIGNMENTTYPE=?";
-			heading = "Assignments By Assignment Type";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1,assignmenttype);
+			pstmt.setString(1,studentId);
+		}else if (query.equals("assignmentsByAssignmentType")){
+			heading = "Assignments By Assignment Type";
+			sql = "select * from STRONGHEIM_GRADEBOOK where ASSIGNMENTTYPE=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1,assignmentType);
 		}else if (query.equals("assignmentTypeByStudentId")){
 			heading = "Assignment Type By Student";
-			sql = "select * from STRONGHEIM_GRADEBOOK where ASSIGNMENTTYPE =? and STUDENTID=?";
+			sql = "select * from STRONGHEIM_GRADEBOOK where ASSIGNMENTTYPE=? and STUDENTID=?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1,assignmenttype);
-			pstmt.setString(2,studentid);
+			pstmt.setString(1,assignmentType);
+			pstmt.setString(2,studentId);
 		}else if (query.equals("averageByStudentId")){
 			heading = "Average By Student";
-			sql = "select AVG(assignmentgrade) from STRONGHEIM_GRADEBOOK where STUDENTID=?";
+			sql = "select TO_CHAR(AVG(assignmentgrade),999.99) as Average from STRONGHEIM_GRADEBOOK where STUDENTID=?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1,studentid);
+			pstmt.setInt(1,Integer.parseInt(studentId));
 		}else if (query.equals("averageByStudentAndAssignmentType")){
 			heading = "Assignments By Student and Assignment Type";
-			sql = "select AVG(assignmentgrade) from STRONGHEIM_GRADEBOOK where ASSIGNMENTTYPE LIKE ? and STUDENTID LIKE ?";
+			sql = "select TO_CHAR(AVG(assignmentgrade),999.99) as Average from STRONGHEIM_GRADEBOOK where ASSIGNMENTTYPE=? and STUDENTID=?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1,assignmenttype);
-			pstmt.setString(2,studentid);
-			System.out.println(">>>>" + assignmenttype + " " + studentid);
+			pstmt.setString(1,assignmentType);
+			pstmt.setString(2,studentId);
 		}else if (query.equals("highLowByAssignmentType")){
 			heading = "Hi/Low Grade By Assignment Type";
-			sql = "select max(assignmentgrade) as \"Max Grade\", min(assignmentgrade) as \"Min Grade\" FROM STRONGHEIM_GRADEBOOK where  ASSIGNMENTTYPE=?";
+			sql = "select max(assignmentgrade) as \"Max Grade\", min(assignmentgrade) as \"Min Grade\" FROM STRONGHEIM_GRADEBOOK where ASSIGNMENTTYPE=?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1,assignmenttype);
+			pstmt.setString(1,assignmentType);
 		}else{
 			//error occurred... don't know which query to run
 			heading = "Gradebook Data";
